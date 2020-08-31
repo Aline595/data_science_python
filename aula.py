@@ -1,4 +1,6 @@
 from collections import Counter
+from collections import defaultdict
+
 #Definir lista: coleção de itens mutaveis
 users = [
   # Dicionario(pares de chave e valor)
@@ -124,5 +126,122 @@ def data_scientists_who_like(target_interest):
     user_id for user_id, interest in interests if interest == target_interest
   ]
 
-print (data_scientists_who_like("Big Data"))
+#print (data_scientists_who_like("Big Data"))
+
+# biblioteca defaultdict
+#def f():
+#  return 5
+
+#d = defaultdict(list)
+
+#d["teste"].append(2)
+#print (d["teste"] )
+
+interests_by_user_id = defaultdict(list)
+for user_id, interest in interests:
+  interests_by_user_id[user_id].append(interest)
+
+
+user_id_by_interest = defaultdict(list)
+for user_id, interest in interests:
+  user_id_by_interest[interest].append(user_id)
+
+#print("Interesses por usuário")
+#print(interests_by_user_id)
+#print("Usuarios por interesse")
+#print(user_id_by_interest)
+
+def user_with_common_interest_with(user):
+  return set([
+    interested_user_id
+    for interest in interests_by_user_id[user["id"]]
+    for interested_user_id in user_id_by_interest[interest]
+    if interested_user_id != user["id"]
+  ])
+
+#print(user_with_common_interest_with(users[0]))
+
+def most_common_interests_with(user):
+  return Counter(
+    interested_user_id
+    for interest in interests_by_user_id[user["id"]]
+    for interested_user_id in user_id_by_interest[interest]
+    if interested_user_id != user["id"]
+  )
+
+#print (most_common_interests_with(users[0]))
+
+salario_e_experiencia = [
+  (83000, 8.7), (88000, 8.1),
+  (48000, 0.7), (76000, 6),
+  (69000, 6.5), (76000, 7.5),
+  (60000, 2.5), (83000, 10),
+  (48000, 1.9), (63000, 4.2)
+]
+
+
+salario_por_experiencia = defaultdict(list)
+#aux = {}
+#aux["teste"] = list()
+#aux.append()
+for salario, experiencia in salario_e_experiencia:
+  salario_por_experiencia[experiencia].append(salario)
+
+salario_medio_por_experiencia = {
+  experiencia: sum(salarios) / len(salarios)
+  for experiencia, salarios in salario_por_experiencia.items()
+}
+
+#print(salario_medio_por_experiencia)
+
+def rotulo_por_experiencia(experiencia):
+  if experiencia < 2 :
+    return "(0, 2)"#parenteses intervalo aberto cholchetes fehado
+  elif experiencia < 5:
+    return "[2, 5)"
+  else:
+    return "[5,...)"
+
+salario_por_rotulo = defaultdict(list)
+for salario, experiencia in salario_e_experiencia:
+  salario_por_rotulo[rotulo_por_experiencia(experiencia)].append(salario)
+
+#print(salario_por_rotulo)
+
+salario_medio_por_rotulo = {
+  rotulo: sum(salarios) / len(salarios)
+  for rotulo, salarios in salario_por_rotulo.items()
+}
+
+#print(salario_medio_por_rotulo)
+
+experiencia_e_tipo_de_conta = [
+  (0.7, 'paga'),
+  (1.9,'gratuita'),
+  (2.5,'paga'),
+  (4.2,'gratuita'),
+  (6,'gratuita'),
+  (6.5,'gratuita'),
+  (7.5,'gratuita'),
+  (8.1,'gratuita'),
+  (8.7,'paga'),
+  (10,'paga')
+]
+
+def classificar_como_paga_ou_gratuita(experiencia):
+  if experiencia < 3:
+    return 'paga'
+  elif experiencia < 8.5:
+    return "gratuita"
+  else:
+    return 'paga'
+
+print(classificar_como_paga_ou_gratuita(1.9))
+
+
+
+
+
+
+
 
