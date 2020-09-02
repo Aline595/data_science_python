@@ -1,3 +1,5 @@
+######AULA DIA 24/08 ###############
+
 from collections import Counter
 from collections import defaultdict
 
@@ -45,6 +47,64 @@ def number_of_friends (user):
 
 #print (number_of_friends(users[0]))
 
+######### ATIVIDADE UM #################
+"""
+1-Adicione os atributos sexo e idade aos usuários da rede.
+"""
+def adicionar_sexo_e_idade(user, sexo, idade):
+  user["sexo"] = sexo
+  user["idade"] = idade
+  return user
+
+#print(adicionar_sexo_e_idade(users[3], "masculino", 20))
+
+for user in users:
+  if user["id"] < 5:
+    user["sexo"] = "feminino"
+    user["idade"] = 20
+  else:
+    user["sexo"] = "masculino"   
+    user["idade"] = 40
+
+#print(users)
+"""
+2- Monte um dicionário que tem como chave o id do usuário e 
+como valor uma tupla. O primeiro elemento da tupla deve ter a 
+quantidade de amigos do sexo masculino e o segundo elemento 
+da tupla deve ter a quantidade de amigos do sexo feminino. 
+Escreva funções conforme achar apropriado
+"""
+def contar_amigos_feminino(user):
+  num = 0
+  for user["friends"] in user:
+    if(user["sexo"] == "feminino"):
+      num += 1
+  return num
+  """
+  return len(user["friends": "feminino"])
+  """
+
+#print(contar_amigos_feminino(users[0]))
+
+def contar_amigos_masculino(user):
+  num = 0
+  for user["friends"] in user:
+    if(user["sexo"] == "masculino"):
+      num += 1
+  return num
+
+#print(contar_amigos_masculino(users[0]))
+
+for user in users:
+  user["sexo_amigos"] = {}
+"""
+def adicionar_tupla_amigos(user):
+  return user["sexo_amigos"] = { "masculino": contar_amigos_masculino(user)  "feminino":contar_amigos_feminino(user) }
+print(adicionar_tupla_amigos(users[0]))
+"""
+
+########### AULA DIA 31/08 ############
+
 total_connections = sum([number_of_friends(u) for u in users])
 #print (total_connections)
 
@@ -84,7 +144,6 @@ def friends_of_friends_ids (user):
   ])
 
 #print (friends_of_friends_ids(users[0]))
-
 
 #Counter: Conta quantas vezes determinada coisa aparece em uma coleção, devolve dicionario de frequencias
 #fazer importação
@@ -236,12 +295,94 @@ def classificar_como_paga_ou_gratuita(experiencia):
   else:
     return 'paga'
 
-print(classificar_como_paga_ou_gratuita(1.9))
+#print(classificar_como_paga_ou_gratuita(1.9))
+
+##########ATIVIDADE DOIS #####################
+
+"""
+1-Adicione o atributo “interessado em” aos usuários. Eles podem indicar se 
+estão interessadosem pessoas do sexo masculino, feminino, ambos ou nenhum.
+"""
+
+interessados_em =[
+ (0, "masculino"), (1, "feminino"), (2, "ambos"), (3, "nenhum"), (4, "masculino"), (5, "feminino"), (6, "ambos"),
+ (7, "nenhum"), (8, "masculino"), (9, "feminino")
+]
+
+def data_scientists_interessados_em(interessado):
+  return [
+    user_id for user_id, interessado_em in interessados_em if interessado_em == interessado
+  ]
+
+#print(data_scientists_interessados_em("masculino"))
+"""
+for user in users:
+  user["interessado_em"] = "."
+
+#print(users[0])
+
+def adicionar_interesse():
+  #return user["interessado_em"] = interesse 
+  for user in users:
+    if user["id"] <= 1:
+      user["interessado_em"] = "Masculino"
+    elif user['id'] <= 3:
+      user["interessado_em"] = "Feminino"
+    elif user['id'] <= 5:
+      user["interessado_em"] = "Ambos"
+    else:
+      user["interessado_em"] = "Nenhum"
+  return users
+
+print(adicionar_interesse())
+
+"""
+"""
+2-Escreva uma função que faz sugestões de amizade de acordo com o
+ atributo “interessado em”.
+"""
+sexo_interesse_por_user_id = defaultdict(list)
+for user_id, interessado_em in interessados_em:
+  sexo_interesse_por_user_id[user_id].append(interessado_em)
 
 
+user_id_por_interesse_sexo = defaultdict(list)
+for user_id, interessado_em in interessados_em:
+  user_id_por_interesse_sexo[interessado_em].append(user_id)
 
+def sexo_de_interesse_em_comum(user):
+  return Counter(
+    id_usuario_interessado
+    for interessado_em in sexo_interesse_por_user_id[user["id"]]
+    for id_usuario_interessado in user_id_por_interesse_sexo[interessado_em]
+    if id_usuario_interessado != user["id"]
+  )
 
+#print(sexo_de_interesse_em_comum(users[0]))
 
+"""
+def verifica_interesse(user):
+  return user["interessado_em"]
 
+#print(verifica_interesse(users[0]))
 
+def sugerir_por_interessado_em(user):
+  return set([
+    for useri in users:
+      if useri["interessado_em"] == user["interessado_em"]
+  ])
 
+print(sugerir_por_interessado_em(user[0]))
+"""
+
+"""
+3 Escreva uma função que faz sugestões de amizade de acordo com o 
+atributo “interessado em” e de acordo com interesses em comum.
+"""
+
+def interesses_em_comum_e_sexo_de_interesse_em_comum(user):
+  return Counter(
+    most_common_interests_with(user) and sexo_de_interesse_em_comum(user)
+  )
+
+print(interesses_em_comum_e_sexo_de_interesse_em_comum(users[0]))
